@@ -1,0 +1,54 @@
+name: Terraform PR Governance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+
+jobs:
+  governance-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Install Infracost
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+
+      - name: Run Checkov
+        run: |
+          checkov -d terraform/ --output json --soft-fail > checkov_output.json || true
+
+      - name: Run Infracost
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        run: |
+          infracost breakdown --path terraform/ --format json > infracost_output.json
+
+      - name: Run Policy Check
+        run: |
+          python scripts/policy_check.py \
+            --checkov checkov_output.json \
+            --infracost infracost_output.json \
+            --policies scripts/governance_policies.json \
+            > report.md || echo "GOVERNANCE_FAILED=true" >> $GITHUB_ENV
+
+      - name: Post PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: report.md
+
+      - name: Fail if violations found
+        if: env.GOVERNANCE_FAILED == 'true'
+        run: exit 1

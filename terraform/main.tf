@@ -1,0 +1,38 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Intentional violation: S3 bucket without encryption (CKV_AWS_20)
+resource "aws_s3_bucket" "test_bucket" {
+  bucket = "my-test-bucket-12345"
+
+  tags = {
+    Environment = "dev"
+    Owner       = "team"
+    CostCenter  = "eng"
+  }
+}
+
+# Intentional violation: SSH open to world (CKV_AWS_24)
+resource "aws_security_group" "test_sg" {
+  name = "test-sg"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Normal EC2 instance
+resource "aws_instance" "test_instance" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.micro"
+
+  tags = {
+    Environment = "dev"
+    Owner       = "team"
+    CostCenter  = "eng"
+  }
+}
