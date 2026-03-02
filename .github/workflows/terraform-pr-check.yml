@@ -40,7 +40,8 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: report.md
-
+      - name: Show Report
+        run: cat report.md
       - name: Fail if violations found
         if: env.GOVERNANCE_FAILED == 'true'
         run: exit 1
