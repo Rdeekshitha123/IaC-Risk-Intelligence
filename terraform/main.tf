@@ -24,3 +24,5 @@ resource "aws_instance" "test_instance" {
     CostCenter  = "eng"
   }
 }
+
+# Intentional violation: Unencrypted S3 bucket
