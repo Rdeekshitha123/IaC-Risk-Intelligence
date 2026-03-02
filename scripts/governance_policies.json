@@ -2,7 +2,7 @@
   "security": {
     "critical_blocking": [
       "CKV_AWS_20", "CKV_AWS_57", "CKV_AWS_18",
-      "CKV_AWS_8", "CKV_AWS_24", "CKV_AWS_25",
+      "CKV_AWS_24", "CKV_AWS_25",
       "CKV_AWS_23", "CKV_AWS_40"
     ],
     "high_blocking": [
