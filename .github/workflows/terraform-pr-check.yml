@@ -52,3 +52,5 @@ jobs:
       - name: Fail if violations found
         if: env.GOVERNANCE_FAILED == 'true'
         run: exit 1
+
+// This workflow checks Terraform code in pull requests against defined governance policies using Checkov and Infracost. It posts a report as a comment on the PR and fails the check if any violations are found.
