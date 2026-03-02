@@ -13,15 +13,6 @@
       "CKV_AWS_79", "CKV_AWS_119", "CKV_AWS_338"
     ]
   },
-  "cost": {
-    "monthly_spike_warn_threshold": 100,
-    "monthly_spike_fail_threshold": 500,
-    "max_increase_percent": 50,
-    "instance_limits": {
-      "aws_instance": ["t3.micro","t3.small","t3.medium","t3.large","t3.xlarge"],
-      "aws_db_instance": ["db.t3.micro","db.t3.small","db.t3.medium","db.t3.large"]
-    }
-  },
   "compliance": {
     "allowed_regions": ["us-east-1", "us-west-2", "eu-west-1"],
     "blocked_services": ["aws_kinesis_stream", "aws_appsync_graphql_api", "aws_lightsail_instance"],

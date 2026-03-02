@@ -2,17 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "test_bucket" {
-  bucket = "my-test-bucket-12345"
-
-  tags = {
-    Environment = "dev"
-    Owner       = "team"
-    CostCenter  = "eng"
-  }
-}
-
-
+# Intentional violation: SSH open to world
 resource "aws_security_group" "test_sg" {
   name = "test-sg"
 
@@ -23,7 +13,6 @@ resource "aws_security_group" "test_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 
 resource "aws_instance" "test_instance" {
   ami           = "ami-0c55b159cbfafe1f0"
