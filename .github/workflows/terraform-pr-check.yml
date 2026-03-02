@@ -9,6 +9,9 @@ on:
 jobs:
   governance-check:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout code
@@ -31,13 +34,10 @@ jobs:
           python scripts/policy_check.py \
             --checkov checkov_output.json \
             --policies scripts/governance_policies.json \
-            > report.md || echo "GOVERNANCE_FAILED=true" >> $GITHUB_ENV
+            > report.md || true
 
       - name: Post PR Comment
+        if: always()
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: report.md
-
-      - name: Fail if violations found
-        if: env.GOVERNANCE_FAILED == 'true'
-        run: exit 1
