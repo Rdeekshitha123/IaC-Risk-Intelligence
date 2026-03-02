@@ -9,6 +9,9 @@ on:
 jobs:
   governance-check:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout code
