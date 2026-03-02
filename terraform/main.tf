@@ -2,7 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Intentional violation: S3 bucket without encryption (CKV_AWS_20)
 resource "aws_s3_bucket" "test_bucket" {
   bucket = "my-test-bucket-12345"
 
@@ -13,7 +12,7 @@ resource "aws_s3_bucket" "test_bucket" {
   }
 }
 
-# Intentional violation: SSH open to world (CKV_AWS_24)
+
 resource "aws_security_group" "test_sg" {
   name = "test-sg"
 
@@ -25,7 +24,7 @@ resource "aws_security_group" "test_sg" {
   }
 }
 
-# Normal EC2 instance
+
 resource "aws_instance" "test_instance" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t3.micro"

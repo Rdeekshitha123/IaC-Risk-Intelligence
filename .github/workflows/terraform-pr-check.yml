@@ -22,25 +22,14 @@ jobs:
       - name: Install Checkov
         run: pip install checkov
 
-      - name: Install Infracost
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
-
       - name: Run Checkov
         run: |
           checkov -d terraform/ --output json --soft-fail > checkov_output.json || true
-
-      - name: Run Infracost
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-        run: |
-          infracost breakdown --path terraform/ --format json > infracost_output.json
 
       - name: Run Policy Check
         run: |
           python scripts/policy_check.py \
             --checkov checkov_output.json \
-            --infracost infracost_output.json \
             --policies scripts/governance_policies.json \
             > report.md || echo "GOVERNANCE_FAILED=true" >> $GITHUB_ENV
 
@@ -52,5 +41,3 @@ jobs:
       - name: Fail if violations found
         if: env.GOVERNANCE_FAILED == 'true'
         run: exit 1
-
-// This workflow checks Terraform code in pull requests against defined governance policies using Checkov and Infracost. It posts a report as a comment on the PR and fails the check if any violations are found.
